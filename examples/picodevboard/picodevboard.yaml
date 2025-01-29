@@ -1,0 +1,19 @@
+targets:
+  main:
+    resources:
+      devboard:
+        cls: 'PicoDevBoard'
+        match:
+          ID_SERIAL_SHORT: 'e661410403143232'
+
+    drivers:
+      - PicoDevBoardDriver:
+          name: 'dut_power'
+          cmd: 'dut_power'
+          bindings:
+            board: 'devboard'
+      - PicoDevBoardDriver:
+          name: 'dut_usb_power'
+          cmd: 'dut_usb_power'
+          bindings:
+            board: 'devboard'

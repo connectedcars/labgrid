@@ -546,6 +546,25 @@ class KMTronicRelayExport(USBGenericExport):
         }
 
 @attr.s(eq=False)
+class PicoDevBoardExport(USBGenericExport):
+    """ResourceExport for outputs on KMtronic relays"""
+
+    def __attrs_post_init__(self):
+        super().__attrs_post_init__()
+
+    def _get_params(self):
+        """Helper function to return parameters"""
+        return {
+            "host": self.host,
+            "busnum": self.local.busnum,
+            "devnum": self.local.devnum,
+            "path": self.local.path,
+            "vendor_id": self.local.vendor_id,
+            "model_id": self.local.model_id,
+            #"cmd": self.local.cmd,
+        }
+
+@attr.s(eq=False)
 class USBFlashableExport(USBGenericExport):
     """ResourceExport for Flashable USB devices"""
 
@@ -587,6 +606,7 @@ exports["USBPowerPort"] = USBPowerPortExport
 exports["DeditecRelais8"] = USBDeditecRelaisExport
 exports["HIDRelay"] = USBHIDRelayExport
 exports["KMTronicRelay"] = KMTronicRelayExport
+exports["PicoDevBoard"] = PicoDevBoardExport
 exports["USBFlashableDevice"] = USBFlashableExport
 exports["LXAUSBMux"] = USBGenericExport
 

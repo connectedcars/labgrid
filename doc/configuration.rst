@@ -616,6 +616,23 @@ NetworkKMTronicRelay
 ++++++++++++++++++++
 A :any:`NetworkKMTronicRelay` describes an `KMTronicRelay`_ exported over the network.
 
+PicoDevBoard
++++++++++++++
+A :any:`PicoDevBoard` resource describes a PicoDevBoard.
+
+.. code-block:: yaml
+
+   PicoDevBoard:
+     match:
+       ID_SERIAL_SHORT: 'AB0LBF2U'
+
+Arguments:
+  - match (dict): key and value pairs for a udev match, see `udev Matching`_
+
+NetworkPicoDevBoard
+++++++++++++++++++++
+A :any:`NetworkPicoDevBoard` describes an `PicoDevBoard`_ exported over the network.
+
 NetworkService
 ~~~~~~~~~~~~~~
 A :any:`NetworkService` describes a remote SSH connection.
@@ -2404,6 +2421,57 @@ Arguments:
 .. note::
   In order to be able to use this driver pyserial need to be installed on
   the system the relay is connected to.
+
+
+PicoDevBoardDriver
+~~~~~~~~~~~~~~~~~~~
+A :any:`PicoDevBoardDriver` controls a command using a `PicoDevBoard`_ or `NetworkPicoDevBoard`_ resource.
+It can set and get the current state of the resource.
+
+Binds to:
+  relay:
+    - `PicoDevBoard`_
+    - `NetworkPicoDevBoard`_
+
+Implements:
+  - :any:`DigitalOutputProtocol`
+
+.. code-block:: yaml
+
+   PicoDevBoardDriver: {}
+
+
+.. code-block:: yaml
+
+  drivers:
+    - PicoDevBoardDriver:
+      name: 'dut_power'
+      cmd: 'dut_power'
+      bindings:
+        board: 'devboard'
+    - PicoDevBoardDriver:
+      name: 'dut_usb_power'
+      cmd: 'dut_usb_power'
+      bindings:
+        board: 'devboard'
+
+
+name is what you will refer to when using `labgrid-client io {high,low,get} [name]`
+
+cmd is what on the devboard you wanna control.
+
+Currently supported commands:
+  - dut_power
+  - dut_ignition
+  - dut_usb_power
+  - dut_recovery_mode
+  - dut_uart_power
+  - dut_uart_data
+  - gpi1
+  - gpi2
+
+Arguments:
+  - cmd
 
 ManualSwitchDriver
 ~~~~~~~~~~~~~~~~~~

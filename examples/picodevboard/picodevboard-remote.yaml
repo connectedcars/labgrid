@@ -1,0 +1,17 @@
+targets:
+  main:
+    resources:
+      RemotePlace:
+        name: 'desk-dut'
+
+    drivers:
+      - PicoDevBoardDriver:
+          name: 'dut_power'
+          cmd: 'dut_power'
+          bindings:
+            board: 'devboard'
+      - PicoDevBoardDriver:
+          name: 'dut_usb_power'
+          cmd: 'dut_usb_power'
+          bindings:
+            board: 'devboard'

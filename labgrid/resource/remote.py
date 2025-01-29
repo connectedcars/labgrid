@@ -345,6 +345,14 @@ class NetworkKMTronicRelay(RemoteUSBResource):
 
 @target_factory.reg_resource
 @attr.s(eq=False)
+class NetworkPicoDevBoard(RemoteUSBResource):
+    """The NetworkPicoDevBoard describes a remotely accessible PicoDevBoard"""
+    def __attrs_post_init__(self):
+        self.timeout = 10.0
+        super().__attrs_post_init__()
+
+@target_factory.reg_resource
+@attr.s(eq=False)
 class NetworkSysfsGPIO(NetworkResource, ManagedResource):
     manager_cls = RemotePlaceManager
 

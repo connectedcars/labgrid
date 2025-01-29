@@ -33,6 +33,7 @@ from .udev import (
     USBTMC,
     USBVideo,
     KMTronicRelay,
+    PicoDevBoard,
 )
 from .common import Resource, ResourceManager, ManagedResource
 from .ykushpowerport import YKUSHPowerPort, NetworkYKUSHPowerPort
