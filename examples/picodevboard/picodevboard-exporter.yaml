@@ -1,0 +1,6 @@
+desk-dut:
+  location: Work Desk
+  devboard:
+    cls: 'PicoDevBoard'
+    match:
+      ID_SERIAL_SHORT: 'e661410403143232'

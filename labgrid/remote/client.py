@@ -898,7 +898,7 @@ class ClientSession:
         name = self.args.name
         target = self._get_target(place)
         from ..resource import ModbusTCPCoil, OneWirePIO, HttpDigitalOutput
-        from ..resource.remote import NetworkDeditecRelais8, NetworkSysfsGPIO, NetworkLXAIOBusPIO, NetworkHIDRelay, NetworkKMTronicRelay
+        from ..resource.remote import NetworkDeditecRelais8, NetworkSysfsGPIO, NetworkLXAIOBusPIO, NetworkHIDRelay, NetworkKMTronicRelay, NetworkPicoDevBoard
         drv = None
         try:
             drv = target.get_driver("DigitalOutputProtocol", name=name)
@@ -920,6 +920,8 @@ class ClientSession:
                     drv = self._get_driver_or_new(target, "HIDRelayDriver", name=name)
                 elif isinstance(resource, NetworkKMTronicRelay):
                     drv = self._get_driver_or_new(target, "KMTronicRelayDriver", name=name)
+                elif isinstance(resource, NetworkPicoDevBoard):
+                    drv = self._get_driver_or_new(target, "PicoDevBoardDriver", name=name)
                 if drv:
                     break
 

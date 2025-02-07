@@ -49,3 +49,4 @@ from .deditecrelaisdriver import DeditecRelaisDriver
 from .dediprogflashdriver import DediprogFlashDriver
 from .httpdigitaloutput import HttpDigitalOutputDriver
 from .kmtronicrelay import KMTronicRelayDriver
+from .picodevboard import PicoDevBoardDriver
