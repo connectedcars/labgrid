@@ -2668,6 +2668,8 @@ Arguments:
   - image (str): optional, key in :ref:`images <labgrid-device-config-images>` containing the path
     of an image to bootstrap onto the target
   - script (str): optional, run built-in script with ``uuu -b``, called with image as arg0
+  - extra-files (list): list of paths to extra files to transfer over and use with uuu.
+    these files are placed in the same folder as your image but are only used if the image file use them.
 
 USBStorageDriver
 ~~~~~~~~~~~~~~~~
