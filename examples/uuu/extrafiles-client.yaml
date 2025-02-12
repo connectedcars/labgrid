@@ -1,0 +1,23 @@
+targets:
+  main:
+    resources:
+      RemotePlace:
+        name: 'desk'
+
+    drivers:
+      DigitalOutputPowerDriver:
+        delay: 2.0
+      UUUDriver:
+        image: uuu-script
+        extra_files:
+          - /home/exporter/fitImage
+          - /home/exporter/u-boot.imx
+
+options:
+    coordinator_address: 'localhost'
+
+tools:
+  uuu-loader: '/usr/bin/uuu'
+
+images:
+  uuu-script: '/home/exporter/iwg26-v3-flash.uuu'
