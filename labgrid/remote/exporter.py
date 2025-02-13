@@ -626,6 +626,10 @@ class ProviderGenericExport(ResourceExport):
 
     def _get_params(self):
         """Helper function to return parameters"""
+        if self.cls == "NFSProvider" or self.cls == "RemoteNFSProvider":
+            return {
+                "host": self.host,
+            }
         return {
             "host": self.host,
             "internal": self.local.internal,
