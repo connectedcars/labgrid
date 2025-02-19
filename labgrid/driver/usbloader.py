@@ -198,14 +198,15 @@ class UUUDriver(Driver, BootstrapProtocol):
                 resource.sync_to_resource(symlink=f"{link_path}/{os.path.basename(file)}")
                 print(resource.get_remote_path())
 
+        symlink_path = f"{link_path}/{os.path.basename(filename)}" if link_path != None else None
         if filename is None and self.image is not None:
             filename = self.target.env.config.get_image_path(self.image)
         mf = ManagedFile(filename, self.loader)
-        mf.sync_to_resource(symlink=f"{link_path}/{os.path.basename(filename)}")
+        mf.sync_to_resource(symlink=symlink_path)
         print(mf.get_remote_path())
 
         cmd = ['-b', self.script] if self.script else []
-        path = [f"{link_path}/{os.path.basename(filename)}"] if link_path != None else [mf.get_remote_path()]
+        path = [symlink_path] if link_path != None else [mf.get_remote_path()]
 
         processwrapper.check_output(
             self.loader.command_prefix + [self.tool] + cmd + path,
