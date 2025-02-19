@@ -8,6 +8,9 @@ from .common import Driver
 from ..util.managedfile import ManagedFile
 from ..util.timeout import Timeout
 from ..util.helper import processwrapper
+from labgrid.util.helper import get_user
+from labgrid.util.ssh import sshmanager
+import os
 
 
 @target_factory.reg_driver
@@ -158,6 +161,7 @@ class UUUDriver(Driver, BootstrapProtocol):
 
     image = attr.ib(default=None)
     script = attr.ib(default='', validator=attr.validators.instance_of(str))
+    extra_files = attr.ib(default=None)
 
     def __attrs_post_init__(self):
         super().__attrs_post_init__()
@@ -176,18 +180,40 @@ class UUUDriver(Driver, BootstrapProtocol):
     @Driver.check_active
     @step(args=['filename'])
     def load(self, filename=None):
+
+        link_path = None
+
+        if self.extra_files != None:
+            host = self.loader.host
+            conn = sshmanager.open(host)
+
+            rpath = f"{self.get_user_cache_path()}/"
+            stdout, stderr, returncode = conn.run(f"mktemp -d {rpath}uuu.XXXXXXXX")
+            print(stdout)
+            print(stderr)
+            link_path = stdout[0]
+
+            for file in self.extra_files:
+                resource = ManagedFile(file, self.loader)
+                resource.sync_to_resource(symlink=f"{link_path}/{os.path.basename(file)}")
+                print(resource.get_remote_path())
+
         if filename is None and self.image is not None:
             filename = self.target.env.config.get_image_path(self.image)
         mf = ManagedFile(filename, self.loader)
-        mf.sync_to_resource()
+        mf.sync_to_resource(symlink=f"{link_path}/{os.path.basename(filename)}")
+        print(mf.get_remote_path())
 
         cmd = ['-b', self.script] if self.script else []
+        path = [f"{link_path}/{os.path.basename(filename)}"] if link_path != None else [mf.get_remote_path()]
 
         processwrapper.check_output(
-            self.loader.command_prefix + [self.tool] + cmd + [mf.get_remote_path()],
+            self.loader.command_prefix + [self.tool] + cmd + path,
             print_on_silent_log=True
         )
 
+    def get_user_cache_path(self):
+        return f"/var/cache/labgrid/{get_user()}"
 
 @target_factory.reg_driver
 @attr.s(eq=False)
