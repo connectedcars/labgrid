@@ -189,21 +189,17 @@ class UUUDriver(Driver, BootstrapProtocol):
 
             rpath = f"{self.get_user_cache_path()}/"
             stdout, stderr, returncode = conn.run(f"mktemp -d {rpath}uuu.XXXXXXXX")
-            print(stdout)
-            print(stderr)
             link_path = stdout[0]
 
             for file in self.extra_files:
                 resource = ManagedFile(file, self.loader)
                 resource.sync_to_resource(symlink=f"{link_path}/{os.path.basename(file)}")
-                print(resource.get_remote_path())
 
         symlink_path = f"{link_path}/{os.path.basename(filename)}" if link_path != None else None
         if filename is None and self.image is not None:
             filename = self.target.env.config.get_image_path(self.image)
         mf = ManagedFile(filename, self.loader)
         mf.sync_to_resource(symlink=symlink_path)
-        print(mf.get_remote_path())
 
         cmd = ['-b', self.script] if self.script else []
         path = [symlink_path] if link_path != None else [mf.get_remote_path()]
